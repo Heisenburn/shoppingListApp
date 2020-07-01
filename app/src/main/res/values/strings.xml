@@ -14,6 +14,10 @@ limitations under the License. -->
     <string name="action_settings">Settings</string>
     <string name="hint_word">Word…</string>
     <string name="button_save">Save</string>
-    <string name="empty_not_saved">Word not saved because it is empty.</string>
+    <string name="empty_not_saved">Product is empty!</string>
+    <string name="added_already_not_saved">Product already added!</string>
     <string name="add_word">Add word</string>
+    <string name="comma_hint">Hint: Add many elements - use comma to separate them</string>
+    <string name="last_elements_hint">Hint: Click on element to add it</string>
+    <string name="last_elements">Last elements:</string>
 </resources>

@@ -56,4 +56,6 @@ dependencies {
 // Testing
     androidTestImplementation "androidx.arch.core:core-testing:$rootProject.coreTestingVersion"
 
+
+    implementation 'com.google.android:flexbox:2.0.1'
 }

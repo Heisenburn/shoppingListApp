@@ -10,11 +10,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -42,22 +44,19 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view, int position) {
 
                 CheckBox checkBox = view.findViewById(R.id.checkBoxInProduct);
+                String elementToBeMoved = Objects.requireNonNull(mProductViewModel.getAllProducts().getValue()).get(position).getName();
+
 
                 if(checkBox.isChecked()){
                     checkBox.setChecked(false);
-                }else {
 
-                    String elementToBeMoved = Objects.requireNonNull(mProductViewModel.getAllProducts().getValue()).get(position).getName();
+                    mProductViewModel.setFalseStatusInDataBase(elementToBeMoved);
+
+                }else {
 
                     mProductViewModel.moveProductToTheBottom(elementToBeMoved);
 
-                    checkBox.setChecked(true);
-
-
                 }
-
-
-
 
             }
 
@@ -78,7 +77,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Button removeAllButton = findViewById(R.id.removeAllButton);
 
+        removeAllButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mProductViewModel.removeAllElements();
+            }
+        });
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -90,9 +96,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-
-
-
     }
 
     @Override
@@ -101,17 +104,32 @@ public class MainActivity extends AppCompatActivity {
 
         if (requestCode == NEW_PRODUCT_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
 
+            String passedValue = Objects.requireNonNull(data.getStringExtra(NewProductActivity.EXTRA_REPLY));
+
+            if(passedValue.contains(",")){
 
 
-            Product product = new Product(data.getStringExtra(NewProductActivity.EXTRA_REPLY),false);
-            mProductViewModel.insert(product);
+                String[] commaProducts = passedValue.split(",[ ]*");
 
-        } else {
-            Toast.makeText(
-                    getApplicationContext(),
-                    R.string.empty_not_saved,
-                    Toast.LENGTH_LONG).show();
+                for (String commaProduct : commaProducts) {
+
+
+                    Product product = new Product(commaProduct, false);
+
+                    mProductViewModel.insert(product);
+
+
+
+                }
+
+
+            }else {
+
+
+                Product product = new Product(Objects.requireNonNull(data.getStringExtra(NewProductActivity.EXTRA_REPLY)), false);
+                mProductViewModel.insert(product);
+
+            }
         }
-
     }
 }
